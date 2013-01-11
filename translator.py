@@ -1,68 +1,81 @@
 mapping = {
-    "0": ["S", "Z", "ZH"],
-    "1": ["T", "D"],
-    "2": ["N"],
-    "3": ["M"],
-    "4": ["R", "ER"],
-    "5": ["L"],
-    "6": ["SH", "JH", "CH", "TH", "DH"],
-    "7": ["G", "K"],
-    "8": ["F", "V"],
-    "9": ["B", "P"]
+    'S': '0',
+    'Z': '0',
+    'ZH': '0',
+    'T': '1',
+    'D': '1',
+    'N': '2',
+    'M': '3',
+    'R': '4',
+    'ER': '4',
+    'L': '5',
+    'SH': '6',
+    'JH': '6',
+    'CH': '6',
+    'TH': '6',
+    'DH': '6',
+    'G': '7',
+    'K': '7',
+    'F': '8',
+    'V': '8',
+    'B': '9',
+    'P': '9'
     }
 
 # vowels = ["AH", "IH", "IY", "EH", "AA", "AE", "EY", "AO", "AY", "AW", "OY", "UH", "Y"]
 # unused = ["W", "HH", "NG"]
-dict_ = {}
+dict_ = {} # stores dictionary word with number translation
 
-def find_indices(root_number, dict_word):
-    """ find starting and ending index of dict word phonemes in root number """
-    for index, phoneme in enumerate(dict_[dict_word]):        
-        for key in mapping:
-            # if phoneme in mapping[key] and str(root_number[index]) ==
-            pass
-        
-        
-def phonemes_to_numstring():
-    pass
+def phonemes_to_numstring(phoneme_array):
+    numstring = ''
+    for phoneme in phoneme_array:
+        numstring += mapping[phoneme]
+    return numstring
 
-class WordNode(object):
-    def __init__(self, word, start_index, end_index):
-        self.word = word
-        self.start_index = start_index
-        self.end_index = end_index
-    
-
-with open("dict1.txt") as d_file:
-    for line in iter(lambda: d_file.readline(), ""):
+with open('dict1.txt') as d_file:
+    for line in iter(lambda: d_file.readline(), ''):
         line = line.split()
-        dict_[line[0]] = line[1:]
+        try:
+            dict_[line[0]] = phonemes_to_numstring(line[1:])
+        except KeyError:
+            continue
+
+with open('freq_list.txt') as freq_list, open('dict2.txt', 'w+') as new_dict:
+    freq_list.readline()
+    for line in iter(lambda: freq_list.readline(), ''):
+        line = line.split()
+        try:
+            new_dict.write(line[1].upper() + ' ' + dict_[line[1].upper()] + '\n')
+        except KeyError:
+            continue
 
 
 
-while True:
+"""while True:
     root_mapping = []
-    words = []
+    words = [[] for _ in range(10)]
     try:
         input_string = input("Number to translate: ")
         if len(input_string) == 0:
             print("You didn't enter anything, try again.")
             continue
-        for number in input_string:
-            root_mapping.append(mapping[number])
     except KeyError:
         print("That string contained a character that's not a number. Try again: ")
-    
     for key in dict_:
-        if len(dict_[key]) == len(root_mapping):            
-            for index, t in enumerate(root_mapping):
-                try:
-                    if dict_[key][index] not in t:
-                        break
-                except IndexError:
-                    break
-            else:
-                words.append(key)
-
-    print(words)
+        try:
+            words[input_string.index(dict_[key])].append(key)
+        except ValueError:
+            continue
+        except KeyError:
+            continue
+        
+    for init_word in words[0]:
+    init_word = words[0][0]
+    index = len(dict_[init_word])
+    output = init_word + ' '
+    while index < len(input_string):
+        output += words[index][0] + ' '
+        index += len(dict_[words[index][0]])
+    print(output)"""
+        
         
